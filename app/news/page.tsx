@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/script";
+import Link from "next/link";
 
 export default function News() {
   const [news, setNews] = useState<any[]>([]);
@@ -28,12 +28,13 @@ export default function News() {
           </div>
 
           <nav style={navLinks}>
-            <a href="/" style={link}>Accueil</a>
-            <a href="/news" style={activeLink}>Actualités</a>
-            <a href="/calendar" style={link}>Calendrier</a>
-            {/* LIEN D'AFFILIATION EXNESS */}
+            <Link href="/" style={link}>Accueil</Link>
+            <Link href="/news" style={activeLink}>Actualités</Link>
+            <Link href="/calendar" style={link}>Calendrier</Link>
+            
+            {/* LIEN D'AFFILIATION EXNESS RÉEL */}
             <a 
-              href="TON_LIEN_EXNESS_ICI" 
+              href="https://one.exnessonelink.com/a/o9d6u5m1ye" 
               target="_blank" 
               rel="noopener noreferrer" 
               style={exnessLink}
@@ -48,7 +49,7 @@ export default function News() {
       <div style={bodyContent}>
         <h2 style={sectionTitle}>Actualités</h2>
 
-        {/* PUB ADSENSE HAUT DE PAGE */}
+        {/* PUB ADSENSE HAUT DE PAGE (Automatique) */}
         <div style={adSpaceHeader}>
           <ins className="adsbygoogle"
                style={{ display: 'block' }}
@@ -82,10 +83,10 @@ export default function News() {
                   <div style={adSpaceInList}>
                     <ins className="adsbygoogle"
                          style={{ display: 'block' }}
-                         data-ad-format="fluid"
-                         data-ad-layout-key="-fb+5w+4e-db+86"
                          data-ad-client="ca-pub-8489437208975699"
-                         data-ad-slot="XXXXXXXXXX"></ins>
+                         data-ad-slot="XXXXXXXXXX"
+                         data-ad-format="fluid"
+                         data-ad-layout-key="-fb+5w+4e-db+86"></ins>
                   </div>
                 )}
               </div>
@@ -97,7 +98,7 @@ export default function News() {
   );
 }
 
-/* ---------------- STYLES STRICT MATCH + NEW ELEMENTS ---------------- */
+/* ---------------- STYLES ---------------- */
 
 const container = { background: "#020617", minHeight: "100vh", color: "white", fontFamily: "Arial, sans-serif" };
 const headerWrapper = { borderBottom: "1px solid #1e293b", padding: "20px 0", marginBottom: "30px" };
@@ -108,15 +109,15 @@ const navLinks = { display: "flex", gap: "20px", alignItems: "center" };
 const link = { color: "#facc15", textDecoration: "none", fontSize: "14px" };
 const activeLink = { color: "#fff", fontWeight: "bold", textDecoration: "none", fontSize: "14px" };
 
-// Style Spécial pour Exness
 const exnessLink = { 
   color: "#000", 
   background: "#facc15", 
-  padding: "6px 12px", 
-  borderRadius: "5px", 
+  padding: "6px 14px", 
+  borderRadius: "6px", 
   textDecoration: "none", 
   fontSize: "13px", 
-  fontWeight: "bold" 
+  fontWeight: "bold" as const,
+  transition: "0.3s"
 };
 
 const bodyContent = { maxWidth: "1200px", margin: "0 auto", padding: "0 20px" };
@@ -126,6 +127,5 @@ const newsCard = { background: "#0b1e3a", padding: "20px", borderRadius: "8px", 
 const newsTitle = { fontWeight: "bold", fontSize: "16px", margin: 0, lineHeight: "1.5" };
 const sourceStyle = { color: "#94a3b8", fontSize: "13px", marginTop: "5px" };
 
-// Styles pour les publicités
-const adSpaceHeader = { margin: "0 auto 30px auto", textAlign: "center" as const, minHeight: "90px", background: "rgba(255,255,255,0.02)" };
+const adSpaceHeader = { margin: "0 auto 30px auto", textAlign: "center" as const, minHeight: "90px" };
 const adSpaceInList = { margin: "10px 0 25px 0", textAlign: "center" as const, minHeight: "100px" };
