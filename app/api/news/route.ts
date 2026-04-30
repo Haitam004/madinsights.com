@@ -1,6 +1,6 @@
 export async function GET() {
   try {
-    const API_KEY = "d7kv8u9r01qiqbcvskl0d7kv8u9r01qiqbcvsklg";
+    const API_KEY = "d7pjge1r01qlb0aa7o6gd7pjge1r01qlb0aa7o70";
 
     const res = await fetch(
       `https://finnhub.io/api/v1/news?category=general&token=${API_KEY}`
