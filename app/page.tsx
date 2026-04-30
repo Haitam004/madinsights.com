@@ -1,7 +1,9 @@
 "use client";
 
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
+
 
 export default function Home() {
   const normalizeImpact = (impact: string) => {
@@ -33,6 +35,13 @@ export default function Home() {
       .then(setCalendar)
       .catch(() => setCalendar([]));
   }, []);
+
+  useEffect(() => {
+  try {
+    // @ts-ignore
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+  } catch {}
+}, []);
 
   // 🔥 EVENTS HIGH IMPACT
  const isRelevantEvent = (e: any) => {
@@ -212,6 +221,15 @@ if (usdHigh && madHigh) {
           </div>
         </div>
       </div>
+      <div style={{ margin: "20px 0", textAlign: "center" }}>
+  <ins
+    className="adsbygoogle"
+    style={{ display: "block" }}
+    data-ad-client="ca-pub-XXXX"   // 🔴 TA CLÉ
+    data-ad-slot="XXXX"           // 🔴 donné par Google
+    data-ad-format="auto"
+  />
+</div>
       {/* 🧠 MARKET ANALYSIS */}
 <div style={analysisGrid}>
 
@@ -406,8 +424,9 @@ const ctaSecondary = {
 };
 
 const priceRow = {
-  display: "flex",
-  gap: "20px",
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+  gap: "15px",
   marginBottom: "30px"
 };
 

@@ -1,21 +1,29 @@
 import { Inter } from "next/font/google";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const metadata = {
+  themeColor: "#020617"
+};
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr">
-      <body className={inter.className} style={{
-        margin: 0,
-        background: "linear-gradient(135deg, #071530 0%, #0a1f44 50%, #020617 100%)",
-        color: "white"
-      }}>
-        {children}
-      </body>
-    </html>
+   <html lang="fr">
+  <body>
+    
+    <Script
+      strategy="afterInteractive"
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      async
+      crossOrigin="anonymous"
+    />
+
+    {children}
+  </body>
+</html>
   );
 }

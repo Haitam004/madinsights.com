@@ -212,13 +212,14 @@ const activeLink = {
 const table = {
   background: "#0b1e3a",
   borderRadius: "12px",
-  overflow: "hidden",
+  overflow: "auto",
   boxShadow: "0 10px 30px rgba(0,0,0,0.4)"
 };
 
 const rowHeader = {
   display: "grid",
-  gridTemplateColumns: "1fr 1fr 1fr 1fr 3fr 1fr 1fr 1fr",
+  gridTemplateColumns: "120px 80px 80px 100px 250px 100px 100px 100px",
+  minWidth: "900px", // ✅ MOBILE FIX
   background: "#071530",
   padding: "12px",
   fontWeight: "bold",
@@ -227,7 +228,8 @@ const rowHeader = {
 
 const row = (impact: string) => ({
   display: "grid",
-  gridTemplateColumns: "1fr 1fr 1fr 1fr 3fr 1fr 1fr 1fr",
+  gridTemplateColumns: "120px 80px 80px 100px 250px 100px 100px 100px",
+  minWidth: "900px", // ✅ MOBILE FIX
   padding: "12px",
   borderTop: "1px solid #1f3a5f",
   fontSize: "13px",
