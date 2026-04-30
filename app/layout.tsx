@@ -22,12 +22,7 @@ export default function RootLayout({
     
     <div style={{ background: "#020617", minHeight: "100vh" }}>
       
-      <Script
-        strategy="afterInteractive"
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-        async
-        crossOrigin="anonymous"
-      />
+      
 
       {children}
 
