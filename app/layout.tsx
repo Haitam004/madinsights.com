@@ -1,14 +1,15 @@
 import { Inter } from "next/font/google";
-import Script from "next/script";
+import "./globals.css"; // Assure-toi d'importer tes styles globaux s'ils existent
 
 const inter = Inter({
   subsets: ["latin"],
-  display: "swap"
+  display: "swap",
 });
 
 export const metadata = {
+  title: "MAD Insights",
+  description: "Market Analytics Morocco",
   themeColor: "#020617",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1"
 };
 
 export default function RootLayout({
@@ -17,19 +18,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-   <html lang="fr">
-  <body className={inter.className}>
-    
-    <div style={{ background: "#020617", minHeight: "100vh" }}>
-      
-      
-
-      {children}
-
-    </div>
-
-  </body>
-</html>
+    <html lang="fr">
+      <body 
+        className={inter.className} 
+        style={{ 
+          margin: 0, 
+          padding: 0, 
+          backgroundColor: "#020617",
+          color: "white" 
+        }}
+      >
+        <div style={{ 
+          background: "#020617", 
+          minHeight: "100vh",
+          width: "100%" 
+        }}>
+          {children}
+        </div>
+      </body>
+    </html>
   );
 }
-<body className={inter.className} style={{ background: "#020617" }}></body>
