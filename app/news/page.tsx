@@ -17,7 +17,7 @@ export default function News() {
   }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={container}>
 
       {/* HEADER */}
       <div style={{
@@ -76,3 +76,29 @@ export default function News() {
     </div>
   );
 }
+const container = {
+  padding: "30px",
+  background: "#020617", // ✅ fond dark global
+  minHeight: "100vh",
+  color: "white", // ✅ texte blanc
+  fontFamily: "Arial, sans-serif" // ✅ fix police
+};
+const card = {
+  background: "#0b1e3a",
+  padding: "20px",
+  borderRadius: "12px",
+  marginBottom: "20px",
+  color: "white", // ✅ important
+  boxShadow: "0 5px 20px rgba(0,0,0,0.3)"
+};
+const title = {
+  fontSize: "16px",
+  fontWeight: "bold",
+  marginBottom: "10px",
+  lineHeight: "1.4"
+};
+
+const source = {
+  color: "#aaa",
+  fontSize: "13px"
+};

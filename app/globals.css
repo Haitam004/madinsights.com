@@ -25,3 +25,6 @@ html, body {
   background: #020617;
   overscroll-behavior: none;
 }
+body {
+  font-family: 'Inter', sans-serif;
+}
