@@ -4,6 +4,11 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 export default function Home() {
+  const [market, setMarket] = useState<any>({});
+  const [news, setNews] = useState<any[]>([]);
+  const [calendar, setCalendar] = useState<any[]>([]);
+  const [isMounted, setIsMounted] = useState(false); // Pour corriger l'erreur d'hydratation
+
   const normalizeImpact = (impact: string) => {
     if (!impact) return "low";
     const i = impact.toLowerCase();
@@ -12,32 +17,11 @@ export default function Home() {
     return "low";
   };
 
-  const [market, setMarket] = useState<any>({});
-  const [news, setNews] = useState<any[]>([]);
-  const [calendar, setCalendar] = useState<any[]>([]);
-
   useEffect(() => {
-    fetch("/api/market")
-      .then(res => res.json())
-      .then(setMarket)
-      .catch(() => setMarket({}));
-
-    fetch("/api/news")
-      .then(res => res.json())
-      .then(setNews)
-      .catch(() => setNews([]));
-
-    fetch("/api/calendar")
-      .then(res => res.json())
-      .then(setCalendar)
-      .catch(() => setCalendar([]));
-  }, []);
-
-  useEffect(() => {
-    try {
-      // @ts-ignore
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch {}
+    setIsMounted(true);
+    fetch("/api/market").then(res => res.json()).then(setMarket).catch(() => setMarket({}));
+    fetch("/api/news").then(res => res.json()).then(setNews).catch(() => setNews([]));
+    fetch("/api/calendar").then(res => res.json()).then(setCalendar).catch(() => setCalendar([]));
   }, []);
 
   const isRelevantEvent = (e: any) => {
@@ -77,6 +61,7 @@ export default function Home() {
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())[0];
 
   const getCountdown = (date: string) => {
+    if (!isMounted) return "--"; // Évite le conflit Serveur/Client
     const diff = new Date(date).getTime() - Date.now();
     if (diff <= 0) return "En cours";
     const min = Math.floor(diff / 60000);
@@ -94,7 +79,7 @@ export default function Home() {
 
   let riskZone = "Safe";
   let riskColor = "#4ade80";
-  if (nextEvent) {
+  if (nextEvent && isMounted) {
     const diff = new Date(nextEvent.date).getTime() - Date.now();
     if (diff < 3600000) { riskZone = "⚠️ Éviter Trading"; riskColor = "#ff4d4d"; }
     else if (diff < 7200000) { riskZone = "Zone Volatile"; riskColor = "#facc15"; }
@@ -110,14 +95,11 @@ export default function Home() {
 
   return (
     <div style={container}>
-      {/* HEADER AMÉLIORÉ */}
       <div style={header}>
         <div>
           <h2 style={{ margin: 0 }}>MAD Insights</h2>
           <p style={subtitle}>Market Analytics • Morocco</p>
         </div>
-        
-        {/* Navigation isolée pour éviter l'accumulation */}
         <nav style={navLinks}>
           <Link href="/" style={activeLink}>Accueil</Link>
           <Link href="/news" style={link}>Actualités</Link>
@@ -127,7 +109,6 @@ export default function Home() {
 
       <div style={horizontalScrollWrapper}>
         <div style={contentWidthLock}>
-          
           <div style={hero}>
             <h1 style={heroTitle}>Analyse économique Maroc 🇲🇦</h1>
             <p style={heroText}>Comprenez l’impact des news mondiales sur le marché marocain</p>
@@ -205,34 +186,16 @@ export default function Home() {
               topNews.map((n, i) => <p key={i} style={item}>• {n.title}</p>)
             }
           </div>
-
         </div>
       </div>
     </div>
   );
 }
 
-/* ---------------- STYLES ---------------- */
+/* ---------------- STYLES (Inchangés) ---------------- */
 const container = { padding: "20px", background: "#020617", minHeight: "100vh", color: "white" };
-
-// Header flexible pour éviter l'accumulation sur mobile
-const header = { 
-  display: "flex", 
-  justifyContent: "space-between", 
-  alignItems: "center", 
-  flexWrap: "wrap" as const, 
-  gap: "20px", 
-  marginBottom: "30px", 
-  borderBottom: "1px solid #1f3a5f", 
-  paddingBottom: "15px" 
-};
-
-const navLinks = {
-  display: "flex",
-  gap: "15px",
-  flexWrap: "wrap" as const
-};
-
+const header = { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" as const, gap: "20px", marginBottom: "30px", borderBottom: "1px solid #1f3a5f", paddingBottom: "15px" };
+const navLinks = { display: "flex", gap: "15px", flexWrap: "wrap" as const };
 const link = { color: "#facc15", textDecoration: "none", fontSize: "14px" };
 const activeLink = { color: "#fff", fontWeight: "bold", textDecoration: "none", fontSize: "14px" };
 const subtitle = { margin: 0, fontSize: "12px", color: "#aaa" };

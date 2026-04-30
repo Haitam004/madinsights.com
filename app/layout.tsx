@@ -1,5 +1,5 @@
 import { Inter } from "next/font/google";
-import "./globals.css"; // Assure-toi d'importer tes styles globaux s'ils existent
+import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -9,7 +9,6 @@ const inter = Inter({
 export const metadata = {
   title: "MAD Insights",
   description: "Market Analytics Morocco",
-  themeColor: "#020617",
 };
 
 export default function RootLayout({
@@ -19,23 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body 
-        className={inter.className} 
-        style={{ 
-          margin: 0, 
-          padding: 0, 
-          backgroundColor: "#020617",
-          color: "white" 
-        }}
-      >
-        <div style={{ 
-          background: "#020617", 
-          minHeight: "100vh",
-          width: "100%" 
-        }}>
-          {children}
-        </div>
-      </body>
+      <body className={inter.className} style={{ margin: 0, padding: 0, backgroundColor: "#020617", color: "white" }}><div style={{ background: "#020617", minHeight: "100vh", width: "100%" }}>{children}</div></body>
     </html>
   );
 }

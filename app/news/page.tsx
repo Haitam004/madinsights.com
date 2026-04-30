@@ -19,84 +19,90 @@ export default function News() {
   return (
     <div style={container}>
 
-      {/* HEADER FLEXIBLE (Empêche l'accumulation) */}
-      <div style={header}>
-        <div>
-          <h1 style={{ margin: 0 }}>MAD Insights</h1>
-          <p style={subtitle}>
-            Market Analytics • Morocco
-          </p>
-        </div>
+      {/* HEADER AVEC LIGNE DE SÉPARATION FINE */}
+      <div style={headerWrapper}>
+        <div style={headerContent}>
+          <div>
+            <h1 style={mainTitle}>MAD Insights</h1>
+            <p style={subtitle}>Market Analytics • Morocco</p>
+          </div>
 
-        <nav style={navLinks}>
-          <Link href="/" style={link}>Accueil</Link>
-          <Link href="/news" style={activeLink}>Actualités</Link>
-          <Link href="/calendar" style={link}>Calendrier</Link>
-        </nav>
+          <nav style={navLinks}>
+            <Link href="/" style={link}>Accueil</Link>
+            <Link href="/news" style={activeLink}>Actualités</Link>
+            <Link href="/calendar" style={link}>Calendrier</Link>
+          </nav>
+        </div>
       </div>
 
-      <h2 style={{ marginBottom: "20px" }}>Actualités</h2>
+      {/* CORPS DE LA PAGE */}
+      <div style={bodyContent}>
+        <h2 style={sectionTitle}>Actualités</h2>
 
-      {loading ? (
-        <p>Chargement...</p>
-      ) : (
-        news.map((n, i) => (
-          <div key={i} style={newsCard}>
-            <p style={newsTitle}>{n.title}</p>
-
-            <p style={sourceStyle}>
-              Source: {n.source}
-            </p>
-
-            <p style={{
-              color:
-                n.impact === "Haut" ? "#ff4d4d" :
-                n.impact === "Moyen" ? "#facc15" :
-                "#4ade80",
-              fontWeight: "bold",
-              fontSize: "14px",
-              marginTop: "10px"
-            }}>
-              Impact : {n.impact}
-            </p>
+        {loading ? (
+          <p>Chargement...</p>
+        ) : (
+          <div style={newsList}>
+            {news.map((n, i) => (
+              <div key={i} style={newsCard}>
+                <p style={newsTitle}>{n.title}</p>
+                <p style={sourceStyle}>Source: {n.source}</p>
+                <p style={{
+                  color: (n.impact === "Haut" || n.impact === "High") ? "#ff4d4d" : "#4ade80",
+                  fontWeight: "bold",
+                  fontSize: "14px",
+                  marginTop: "10px"
+                }}>
+                  Impact : {n.impact || "Faible"}
+                </p>
+              </div>
+            ))}
           </div>
-        ))
-      )}
+        )}
+      </div>
     </div>
   );
 }
 
-/* ---------------- STYLES ---------------- */
+/* ---------------- STYLES CORRIGÉS (STRICT MATCH) ---------------- */
 
 const container = {
-  padding: "20px",
   background: "#020617",
   minHeight: "100vh",
   color: "white",
   fontFamily: "Arial, sans-serif"
 };
 
-const header = {
+const headerWrapper = {
+  borderBottom: "1px solid #1e293b", // La ligne qui définit la tête du corps
+  padding: "20px 0",
+  marginBottom: "30px"
+};
+
+const headerContent = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  flexWrap: "wrap" as const, // ✅ Permet de passer à la ligne sur mobile
-  gap: "20px",               // ✅ Espace de sécurité entre titre et menu
-  marginBottom: "30px",
-  borderBottom: "1px solid #1f3a5f",
-  paddingBottom: "15px"
+  maxWidth: "1200px",
+  margin: "0 auto",
+  padding: "0 20px"
 };
 
-const navLinks = {
-  display: "flex",
-  gap: "15px",
-  flexWrap: "wrap" as const
+const mainTitle = { 
+  fontSize: "28px", 
+  fontWeight: "bold", 
+  margin: 0 
 };
 
 const subtitle = { 
   margin: 0, 
-  color: "#aaa", 
+  color: "#94a3b8", 
   fontSize: "12px" 
+};
+
+const navLinks = {
+  display: "flex",
+  gap: "20px"
 };
 
 const link = { 
@@ -112,24 +118,40 @@ const activeLink = {
   fontSize: "14px"
 };
 
+const bodyContent = {
+  maxWidth: "1200px",
+  margin: "0 auto",
+  padding: "0 20px"
+};
+
+const sectionTitle = { 
+  fontSize: "22px", 
+  marginBottom: "20px" 
+};
+
+const newsList = {
+  display: "flex",
+  flexDirection: "column" as const,
+  gap: "15px"
+};
+
 const newsCard = {
   background: "#0b1e3a",
   padding: "20px",
-  marginBottom: "15px",
-  borderRadius: "12px",
-  boxShadow: "0 10px 30px rgba(0,0,0,0.4)",
-  border: "1px solid #1e293b"
+  borderRadius: "8px",
+  border: "1px solid #1e293b",
+  boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
 };
 
 const newsTitle = { 
   fontWeight: "bold", 
   fontSize: "16px",
-  lineHeight: "1.4",
-  margin: 0
+  margin: 0,
+  lineHeight: "1.5"
 };
 
 const sourceStyle = { 
-  color: "#aaa", 
+  color: "#94a3b8", 
   fontSize: "13px",
   marginTop: "5px" 
 };
