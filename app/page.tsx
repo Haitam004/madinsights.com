@@ -191,6 +191,27 @@ if (usdHigh && madHigh) {
 
   return (
   
+  <div style={container}>
+    
+    {/* TON HEADER (Ne pas toucher) */}
+    <div style={header}>
+       {/* ... tes liens ... */}
+    </div>
+
+    {/* --- TU AJOUTES CETTE DIV ICI --- */}
+    <div style={horizontalScrollWrapper}>
+      
+      {/* --- ET CELLE-CI --- */}
+      <div style={contentWidthLock}>
+        
+        {/* ICI, TU LAISSES TOUT TON CODE DE DESIGN ACTUEL */}
+        {/* Toutes tes <div style={card}> etc. */}
+
+      </div>
+    </div>
+
+  </div>
+);
     <div style={container}>
 
       {/* HEADER */}
@@ -349,7 +370,7 @@ if (usdHigh && madHigh) {
       </div>
 
     </div>
-  );
+  ;
 }
 
 /* ---------------- STYLES ---------------- */
@@ -472,4 +493,14 @@ const analysisTitle = {
 const analysisDesc = {
   color: "#777",
   fontSize: "12px"
+};
+const horizontalScrollWrapper = {
+  width: "100%",
+  overflowX: "auto" as const,
+  WebkitOverflowScrolling: "touch" as const,
+};
+
+const contentWidthLock = {
+  minWidth: "900px", 
+  paddingBottom: "20px" 
 };
