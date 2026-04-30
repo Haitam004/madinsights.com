@@ -108,27 +108,26 @@ export default function Home() {
   else if (usdHigh) { moroccoImpact = "Pression USD"; moroccoColor = "#facc15"; }
   else if (madHigh) { moroccoImpact = "Risque local"; moroccoColor = "#facc15"; }
 
-  // --- RENDU FINAL ---
   return (
     <div style={container}>
-      {/* HEADER (Fixe, hors du scroll horizontal pour la lisibilité) */}
+      {/* HEADER AMÉLIORÉ */}
       <div style={header}>
         <div>
           <h2 style={{ margin: 0 }}>MAD Insights</h2>
           <p style={subtitle}>Market Analytics • Morocco</p>
         </div>
-        <div>
+        
+        {/* Navigation isolée pour éviter l'accumulation */}
+        <nav style={navLinks}>
           <Link href="/" style={activeLink}>Accueil</Link>
           <Link href="/news" style={link}>Actualités</Link>
           <Link href="/calendar" style={link}>Calendrier</Link>
-        </div>
+        </nav>
       </div>
 
-      {/* WRAPPER DE SCROLL POUR MOBILE */}
       <div style={horizontalScrollWrapper}>
         <div style={contentWidthLock}>
           
-          {/* HERO */}
           <div style={hero}>
             <h1 style={heroTitle}>Analyse économique Maroc 🇲🇦</h1>
             <p style={heroText}>Comprenez l’impact des news mondiales sur le marché marocain</p>
@@ -138,7 +137,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* MARKET ANALYSIS */}
           <div style={analysisGrid}>
             <div style={analysisCard}>
               <p style={analysisTitle}>🧠 Score Marché</p>
@@ -157,7 +155,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* TRADING INTEL */}
           <div style={analysisGrid}>
             <div style={analysisCard}>
               <p style={analysisTitle}>⏱️ Prochain Event</p>
@@ -176,11 +173,10 @@ export default function Home() {
             <div style={analysisCard}>
               <p style={analysisTitle}>🚨 Zone Trading</p>
               <h2 style={{ color: riskColor }}>{riskZone}</h2>
-              <p style={analysisDesc}>Basé sur news imminentes</p>
+              <p style={analysisDesc}>Risque basé sur news imminentes</p>
             </div>
           </div>
 
-          {/* PRICES */}
           <div style={priceRow}>
             <div style={card}>
               <p>GOLD</p>
@@ -192,7 +188,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* EVENTS & NEWS */}
           <div style={card}>
             <h2 style={title}>📅 Événements importants</h2>
             {importantEvents.length === 0 ? <p>Aucun événement important</p> : 
@@ -218,20 +213,38 @@ export default function Home() {
 }
 
 /* ---------------- STYLES ---------------- */
-const container = { padding: "30px", background: "#020617", minHeight: "100vh", color: "white" };
-const header = { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px", borderBottom: "1px solid #1f3a5f", paddingBottom: "15px" };
-const link = { marginRight: "15px", color: "#facc15", textDecoration: "none" };
-const activeLink = { marginRight: "15px", color: "#fff", fontWeight: "bold" };
+const container = { padding: "20px", background: "#020617", minHeight: "100vh", color: "white" };
+
+// Header flexible pour éviter l'accumulation sur mobile
+const header = { 
+  display: "flex", 
+  justifyContent: "space-between", 
+  alignItems: "center", 
+  flexWrap: "wrap" as const, 
+  gap: "20px", 
+  marginBottom: "30px", 
+  borderBottom: "1px solid #1f3a5f", 
+  paddingBottom: "15px" 
+};
+
+const navLinks = {
+  display: "flex",
+  gap: "15px",
+  flexWrap: "wrap" as const
+};
+
+const link = { color: "#facc15", textDecoration: "none", fontSize: "14px" };
+const activeLink = { color: "#fff", fontWeight: "bold", textDecoration: "none", fontSize: "14px" };
 const subtitle = { margin: 0, fontSize: "12px", color: "#aaa" };
-const hero = { background: "linear-gradient(135deg, #0b1e3a, #071530)", padding: "40px", borderRadius: "12px", marginBottom: "30px" };
-const heroTitle = { fontSize: "28px", marginBottom: "10px" };
+const hero = { background: "linear-gradient(135deg, #0b1e3a, #071530)", padding: "30px", borderRadius: "12px", marginBottom: "30px" };
+const heroTitle = { fontSize: "24px", marginBottom: "10px" };
 const heroText = { color: "#aaa", fontSize: "14px" };
-const cta = { marginRight: "10px", padding: "10px 15px", background: "#facc15", color: "#000", borderRadius: "6px", textDecoration: "none", fontWeight: "bold" };
-const ctaSecondary = { padding: "10px 15px", background: "#071530", color: "#fff", borderRadius: "6px", textDecoration: "none" };
+const cta = { marginRight: "10px", padding: "10px 15px", background: "#facc15", color: "#000", borderRadius: "6px", textDecoration: "none", fontWeight: "bold", fontSize: "13px" };
+const ctaSecondary = { padding: "10px 15px", background: "#071530", color: "#fff", borderRadius: "6px", textDecoration: "none", fontSize: "13px" };
 const priceRow = { display: "grid", gap: "15px", marginBottom: "30px", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))" };
 const card = { background: "#0b1e3a", padding: "20px", borderRadius: "12px", marginBottom: "20px" };
-const title = { marginBottom: "10px" };
-const item = { marginBottom: "8px", color: "#ddd" };
+const title = { marginBottom: "10px", fontSize: "18px" };
+const item = { marginBottom: "8px", color: "#ddd", fontSize: "14px" };
 const gold = { color: "#facc15" };
 const analysisGrid = { display: "flex", gap: "20px", marginBottom: "30px", flexWrap: "nowrap" as const };
 const analysisCard = { flex: "0 0 280px", background: "#0b1e3a", padding: "20px", borderRadius: "12px", boxShadow: "0 10px 30px rgba(0,0,0,0.4)" };
