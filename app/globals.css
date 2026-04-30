@@ -1,18 +1,29 @@
-html {
-  background: #020617;
-}
-
-body {
+/* RESET TOTAL */
+* {
   margin: 0;
   padding: 0;
-  background: #020617;
-  color: white;
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
 }
-#root, body, html {
+
+/* BACKGROUND GLOBAL */
+html, body {
+  background-color: #020617 !important;
+  color: white;
   min-height: 100%;
 }
-html, body {
-  background: #020617 !important;
+
+/* FIX MOBILE SAFARI (IMPORTANT) */
+body {
+  min-height: 100vh;
+  min-height: 100dvh; /* 🔥 FIX moderne */
+  overflow-x: hidden;
+}
+
+/* SUPPRIME ESPACE BLANC */
+#__next {
+  min-height: 100%;
+  background: #020617;
+}
+body {
+  padding-bottom: env(safe-area-inset-bottom);
 }
