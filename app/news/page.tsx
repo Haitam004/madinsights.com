@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function News() {
   const [news, setNews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const link = { marginRight: "15px", color: "#facc15" };
+
   useEffect(() => {
     fetch("/api/news")
       .then(res => res.json())
@@ -19,45 +19,32 @@ export default function News() {
   return (
     <div style={container}>
 
-      {/* HEADER */}
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: "20px",
-        borderBottom: "1px solid #1f3a5f",
-        paddingBottom: "10px"
-      }}>
+      {/* HEADER FLEXIBLE (Empêche l'accumulation) */}
+      <div style={header}>
         <div>
           <h1 style={{ margin: 0 }}>MAD Insights</h1>
-          <p style={{ margin: 0, color: "#aaa", fontSize: "12px" }}>
+          <p style={subtitle}>
             Market Analytics • Morocco
           </p>
         </div>
 
-       <div>
-  <Link href="/" style={link}>Accueil</Link>
-  <Link href="/news" style={link}>Actualités</Link>
-  <Link href="/calendar" style={link}>Calendrier</Link>
-</div>
+        <nav style={navLinks}>
+          <Link href="/" style={link}>Accueil</Link>
+          <Link href="/news" style={activeLink}>Actualités</Link>
+          <Link href="/calendar" style={link}>Calendrier</Link>
+        </nav>
       </div>
 
-      <h2>Actualités</h2>
+      <h2 style={{ marginBottom: "20px" }}>Actualités</h2>
 
       {loading ? (
         <p>Chargement...</p>
       ) : (
         news.map((n, i) => (
-          <div key={i} style={{
-            background: "#0b1e3a",
-            padding: "20px",
-            marginBottom: "15px",
-            borderRadius: "10px",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.4)"
-          }}>
-            <p style={{ fontWeight: "bold" }}>{n.title}</p>
+          <div key={i} style={newsCard}>
+            <p style={newsTitle}>{n.title}</p>
 
-            <p style={{ color: "#aaa" }}>
+            <p style={sourceStyle}>
               Source: {n.source}
             </p>
 
@@ -66,7 +53,9 @@ export default function News() {
                 n.impact === "Haut" ? "#ff4d4d" :
                 n.impact === "Moyen" ? "#facc15" :
                 "#4ade80",
-              fontWeight: "bold"
+              fontWeight: "bold",
+              fontSize: "14px",
+              marginTop: "10px"
             }}>
               Impact : {n.impact}
             </p>
@@ -76,29 +65,71 @@ export default function News() {
     </div>
   );
 }
+
+/* ---------------- STYLES ---------------- */
+
 const container = {
-  padding: "30px",
-  background: "#020617", // ✅ fond dark global
-  minHeight: "100vh",
-  color: "white", // ✅ texte blanc
-  fontFamily: "Arial, sans-serif" // ✅ fix police
-};
-const card = {
-  background: "#0b1e3a",
   padding: "20px",
-  borderRadius: "12px",
-  marginBottom: "20px",
-  color: "white", // ✅ important
-  boxShadow: "0 5px 20px rgba(0,0,0,0.3)"
-};
-const title = {
-  fontSize: "16px",
-  fontWeight: "bold",
-  marginBottom: "10px",
-  lineHeight: "1.4"
+  background: "#020617",
+  minHeight: "100vh",
+  color: "white",
+  fontFamily: "Arial, sans-serif"
 };
 
-const source = {
-  color: "#aaa",
-  fontSize: "13px"
+const header = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  flexWrap: "wrap" as const, // ✅ Permet de passer à la ligne sur mobile
+  gap: "20px",               // ✅ Espace de sécurité entre titre et menu
+  marginBottom: "30px",
+  borderBottom: "1px solid #1f3a5f",
+  paddingBottom: "15px"
+};
+
+const navLinks = {
+  display: "flex",
+  gap: "15px",
+  flexWrap: "wrap" as const
+};
+
+const subtitle = { 
+  margin: 0, 
+  color: "#aaa", 
+  fontSize: "12px" 
+};
+
+const link = { 
+  color: "#facc15", 
+  textDecoration: "none",
+  fontSize: "14px"
+};
+
+const activeLink = { 
+  color: "#fff", 
+  fontWeight: "bold",
+  textDecoration: "none",
+  fontSize: "14px"
+};
+
+const newsCard = {
+  background: "#0b1e3a",
+  padding: "20px",
+  marginBottom: "15px",
+  borderRadius: "12px",
+  boxShadow: "0 10px 30px rgba(0,0,0,0.4)",
+  border: "1px solid #1e293b"
+};
+
+const newsTitle = { 
+  fontWeight: "bold", 
+  fontSize: "16px",
+  lineHeight: "1.4",
+  margin: 0
+};
+
+const sourceStyle = { 
+  color: "#aaa", 
+  fontSize: "13px",
+  marginTop: "5px" 
 };
