@@ -1,7 +1,10 @@
 import { Inter } from "next/font/google";
 import Script from "next/script";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap"
+});
 
 export const metadata = {
   themeColor: "#020617"
@@ -13,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
    <html lang="fr">
-  <body>
+  <body className={inter.className}>
     
     <Script
       strategy="afterInteractive"
