@@ -9,25 +9,26 @@ const inter = Inter({
 export const metadata = {
   themeColor: "#020617"
 };
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-   <html lang="fr">
-  <body className={inter.className}>
-    
-    <Script
-      strategy="afterInteractive"
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-      async
-      crossOrigin="anonymous"
-    />
+    <html lang="fr">
+      <body className={inter.className}>
+        
+        <Script
+          strategy="afterInteractive"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+          async
+          crossOrigin="anonymous"
+        />
 
-    {children}
-  </body>
-</html>
+        {children}
+
+      </body>
+    </html>
   );
 }
-<body className={inter.className}></body>
