@@ -222,13 +222,7 @@ if (usdHigh && madHigh) {
         </div>
       </div>
       <div style={{ margin: "20px 0", textAlign: "center" }}>
-  <ins
-    className="adsbygoogle"
-    style={{ display: "block" }}
-    data-ad-client="ca-pub-XXXX"   // 🔴 TA CLÉ
-    data-ad-slot="XXXX"           // 🔴 donné par Google
-    data-ad-format="auto"
-  />
+ 
 </div>
       {/* 🧠 MARKET ANALYSIS */}
 <div style={analysisGrid}>
