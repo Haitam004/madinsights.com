@@ -33,3 +33,4 @@ export default function RootLayout({
     </html>
   );
 }
+<body className={inter.className} style={{ background: "#020617" }}></body>
