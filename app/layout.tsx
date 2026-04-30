@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Script from "next/script"; // Import nécessaire pour AdSense
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,7 +19,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body className={inter.className} style={{ margin: 0, padding: 0, backgroundColor: "#020617", color: "white" }}><div style={{ background: "#020617", minHeight: "100vh", width: "100%" }}>{children}</div></body>
+      <head>
+        {/* Intégration Google AdSense */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8489437208975699"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
+      <body className={inter.className} style={{ margin: 0, padding: 0, backgroundColor: "#020617", color: "white" }}>
+        <div style={{ background: "#020617", minHeight: "100vh", width: "100%" }}>
+          {children}
+        </div>
+      </body>
     </html>
   );
 }
