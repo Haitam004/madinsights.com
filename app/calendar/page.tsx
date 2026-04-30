@@ -14,8 +14,8 @@ export default function CalendarPage() {
       .then(data => setEvents(data))
       .catch(() => setEvents([]));
 
-    // 🔔 permission notif
-    if (Notification.permission !== "granted") {
+    // ✅ FIX : On vérifie si l'iPhone supporte les notifications
+    if ("Notification" in window && Notification.permission !== "granted") {
       Notification.requestPermission();
     }
   }, []);
@@ -49,7 +49,8 @@ useEffect(() => {
     // ⛔ déjà notifié
     if (notified.has(eventId)) return;
 
-    if (Notification.permission === "granted") {
+    // ✅ FIX : On vérifie encore ici avant d'envoyer
+    if ("Notification" in window && Notification.permission === "granted") {
       new Notification("🚨 HIGH IMPACT EVENT", {
         body: e.title
       });
