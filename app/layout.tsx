@@ -1,7 +1,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Script from "next/script"; 
-import Footer from "./components/Footer"; // 1. On importe le Footer
+import Footer from "./components/Footer"; 
+import Header from "./components/Header"; // 1. On importe le Header
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,12 +33,15 @@ export default function RootLayout({
       <body className={inter.className} style={{ margin: 0, padding: 0, backgroundColor: "#020617", color: "white" }}>
         <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", width: "100%" }}>
           
+          {/* 2. Le Header s'affichera maintenant en haut de toutes les pages */}
+          <Header />
+
           {/* Le contenu de tes pages s'affiche ici */}
           <main style={{ flex: 1 }}>
             {children}
           </main>
 
-          {/* 2. Le Footer s'affichera maintenant sur toutes les pages */}
+          {/* Le Footer s'affichera sur toutes les pages */}
           <Footer /> 
           
         </div>

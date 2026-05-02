@@ -69,22 +69,7 @@ useEffect(() => {
   return (
     <div style={container}>
       
-      {/* HEADER */}
-      <div style={header}>
-        <div>
-          <h1 style={{ margin: 0 }}>📅 Calendrier Économique</h1>
-          <p style={{ color: "#aaa", fontSize: "13px" }}>
-            Impact des news sur le marché marocain
-          </p>
-        </div>
-
-        <div>
-          <Link href="/" style={link}>Accueil</Link>
-          <Link href="/news" style={link}>Actualités</Link>
-          <Link href="/calendar" style={activeLink}>Calendrier</Link>
-        </div>
-      </div>
-
+      
       {/* ⚠️ INFO ALERT */}
       <p style={{ color: "#aaa", marginBottom: "10px" }}>
         ⚠️ Les événements HIGH impact déclenchent une alerte automatique

@@ -19,34 +19,7 @@ export default function News() {
   return (
     <div style={container}>
 
-      {/* HEADER AVEC LIGNE DE SÉPARATION FINE */}
-      <div style={headerWrapper}>
-        <div style={headerContent}>
-          <div>
-            <h1 style={mainTitle}>MAD Insights</h1>
-            <p style={subtitle}>Market Analytics • Morocco</p>
-          </div>
-
-          <nav style={navLinks}>
-            <Link href="/" style={link}>Accueil</Link>
-            <Link href="/news" style={activeLink}>Actualités</Link>
-            <Link href="/calendar" style={link}>Calendrier</Link>
-            
-            {/* AJOUT DU LIEN DASHBOARD ICI */}
-            <Link href="/dashboard" style={link}>Dashboard</Link>
-            
-            {/* LIEN D'AFFILIATION EXNESS RÉEL */}
-            <a 
-              href="https://one.exnessonelink.com/a/o9d6u5m1ye" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              style={exnessLink}
-            >
-              Trader sur Exness
-            </a>
-          </nav>
-        </div>
-      </div>
+     
 
       {/* CORPS DE LA PAGE */}
       <div style={bodyContent}>

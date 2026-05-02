@@ -7,7 +7,7 @@ export default function Home() {
   const [market, setMarket] = useState<any>({});
   const [news, setNews] = useState<any[]>([]);
   const [calendar, setCalendar] = useState<any[]>([]);
-  const [isMounted, setIsMounted] = useState(false); // Pour corriger l'erreur d'hydratation
+  const [isMounted, setIsMounted] = useState(false);
 
   const normalizeImpact = (impact: string) => {
     if (!impact) return "low";
@@ -61,7 +61,7 @@ export default function Home() {
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())[0];
 
   const getCountdown = (date: string) => {
-    if (!isMounted) return "--"; // Évite le conflit Serveur/Client
+    if (!isMounted) return "--"; 
     const diff = new Date(date).getTime() - Date.now();
     if (diff <= 0) return "En cours";
     const min = Math.floor(diff / 60000);
@@ -95,18 +95,6 @@ export default function Home() {
 
   return (
     <div style={container}>
-      <div style={header}>
-        <div>
-          <h2 style={{ margin: 0 }}>MAD Insights</h2>
-          <p style={subtitle}>Market Analytics • Morocco</p>
-        </div>
-        <nav style={navLinks}>
-          <Link href="/" style={activeLink}>Accueil</Link>
-          <Link href="/news" style={link}>Actualités</Link>
-          <Link href="/calendar" style={link}>Calendrier</Link>
-        </nav>
-      </div>
-
       <div style={horizontalScrollWrapper}>
         <div style={contentWidthLock}>
           <div style={hero}>
@@ -192,13 +180,8 @@ export default function Home() {
   );
 }
 
-/* ---------------- STYLES (Inchangés) ---------------- */
+/* ---------------- STYLES ---------------- */
 const container = { padding: "20px", background: "#020617", minHeight: "100vh", color: "white" };
-const header = { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" as const, gap: "20px", marginBottom: "30px", borderBottom: "1px solid #1f3a5f", paddingBottom: "15px" };
-const navLinks = { display: "flex", gap: "15px", flexWrap: "wrap" as const };
-const link = { color: "#facc15", textDecoration: "none", fontSize: "14px" };
-const activeLink = { color: "#fff", fontWeight: "bold", textDecoration: "none", fontSize: "14px" };
-const subtitle = { margin: 0, fontSize: "12px", color: "#aaa" };
 const hero = { background: "linear-gradient(135deg, #0b1e3a, #071530)", padding: "30px", borderRadius: "12px", marginBottom: "30px" };
 const heroTitle = { fontSize: "24px", marginBottom: "10px" };
 const heroText = { color: "#aaa", fontSize: "14px" };
