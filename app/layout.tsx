@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Script from "next/script"; // Import nécessaire pour AdSense
+import Script from "next/script"; 
+import Footer from "./components/Footer"; // 1. On importe le Footer
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,8 +30,16 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className} style={{ margin: 0, padding: 0, backgroundColor: "#020617", color: "white" }}>
-        <div style={{ background: "#020617", minHeight: "100vh", width: "100%" }}>
-          {children}
+        <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", width: "100%" }}>
+          
+          {/* Le contenu de tes pages s'affiche ici */}
+          <main style={{ flex: 1 }}>
+            {children}
+          </main>
+
+          {/* 2. Le Footer s'affichera maintenant sur toutes les pages */}
+          <Footer /> 
+          
         </div>
       </body>
     </html>
