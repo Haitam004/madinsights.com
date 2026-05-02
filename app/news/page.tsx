@@ -32,6 +32,9 @@ export default function News() {
             <Link href="/news" style={activeLink}>Actualités</Link>
             <Link href="/calendar" style={link}>Calendrier</Link>
             
+            {/* AJOUT DU LIEN DASHBOARD ICI */}
+            <Link href="/dashboard" style={link}>Dashboard</Link>
+            
             {/* LIEN D'AFFILIATION EXNESS RÉEL */}
             <a 
               href="https://one.exnessonelink.com/a/o9d6u5m1ye" 
@@ -49,7 +52,7 @@ export default function News() {
       <div style={bodyContent}>
         <h2 style={sectionTitle}>Actualités</h2>
 
-        {/* 2. APPEL À L'ACTION (CTA) CONTEXTUEL POUR EXNESS (Conservé) */}
+        {/* 2. APPEL À L'ACTION (CTA) CONTEXTUEL POUR EXNESS */}
         <div style={{
           background: "linear-gradient(90deg, #1e293b 0%, #0f172a 100%)",
           padding: "15px",
@@ -82,7 +85,7 @@ export default function News() {
           </a>
         </div>
 
-        {/* PUB ADSENSE HAUT DE PAGE (Automatique) */}
+        {/* PUB ADSENSE HAUT DE PAGE */}
         <div style={adSpaceHeader}>
           <ins className="adsbygoogle"
                style={{ display: 'block' }}
@@ -102,7 +105,6 @@ export default function News() {
                   <p style={newsTitle}>{n.title}</p>
                   <p style={sourceStyle}>Source: {n.source}</p>
                   
-                  {/* RETOUR À L'ANCIEN DESIGN POUR L'IMPACT */}
                   <p style={{
                     color: (n.impact === "Haut" || n.impact === "High") ? "#ff4d4d" : "#4ade80",
                     fontWeight: "bold",
