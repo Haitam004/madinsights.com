@@ -49,6 +49,39 @@ export default function News() {
       <div style={bodyContent}>
         <h2 style={sectionTitle}>Actualités</h2>
 
+        {/* 2. APPEL À L'ACTION (CTA) CONTEXTUEL POUR EXNESS (Conservé) */}
+        <div style={{
+          background: "linear-gradient(90deg, #1e293b 0%, #0f172a 100%)",
+          padding: "15px",
+          borderRadius: "8px",
+          borderLeft: "4px solid #facc15",
+          marginBottom: "25px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center"
+        }}>
+          <div>
+            <p style={{ margin: 0, fontWeight: "bold", fontSize: "14px" }}>Prêt à trader ces opportunités ?</p>
+            <p style={{ margin: 0, color: "#94a3b8", fontSize: "12px" }}>Ouvrez un compte chez notre partenaire de confiance au Maroc.</p>
+          </div>
+          <a 
+            href="https://one.exnessonelink.com/a/o9d6u5m1ye" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ 
+              backgroundColor: "#facc15", 
+              color: "#000", 
+              padding: "8px 15px", 
+              borderRadius: "5px", 
+              fontWeight: "bold", 
+              textDecoration: "none",
+              fontSize: "13px" 
+            }}
+          >
+            Trader maintenant
+          </a>
+        </div>
+
         {/* PUB ADSENSE HAUT DE PAGE (Automatique) */}
         <div style={adSpaceHeader}>
           <ins className="adsbygoogle"
@@ -68,6 +101,8 @@ export default function News() {
                 <div style={newsCard}>
                   <p style={newsTitle}>{n.title}</p>
                   <p style={sourceStyle}>Source: {n.source}</p>
+                  
+                  {/* RETOUR À L'ANCIEN DESIGN POUR L'IMPACT */}
                   <p style={{
                     color: (n.impact === "Haut" || n.impact === "High") ? "#ff4d4d" : "#4ade80",
                     fontWeight: "bold",
