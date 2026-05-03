@@ -95,85 +95,83 @@ export default function Home() {
 
   return (
     <div style={container}>
-      <div style={horizontalScrollWrapper}>
-        <div style={contentWidthLock}>
-          <div style={hero}>
-            <h1 style={heroTitle}>Analyse économique Maroc 🇲🇦</h1>
-            <p style={heroText}>Comprenez l’impact des news mondiales sur le marché marocain</p>
-            <div style={{ marginTop: "20px" }}>
-              <Link href="/calendar" style={cta}>📅 Voir Calendrier</Link>
-              <Link href="/news" style={ctaSecondary}>📰 Actualités</Link>
-            </div>
+      <div style={contentWidthLock}>
+        <div style={hero}>
+          <h1 style={heroTitle}>Analyse économique Maroc 🇲🇦</h1>
+          <p style={heroText}>Comprenez l’impact des news mondiales sur le marché marocain</p>
+          <div style={ctaContainer}>
+            <Link href="/calendar" style={cta}>📅 Voir Calendrier</Link>
+            <Link href="/news" style={ctaSecondary}>📰 Actualités</Link>
           </div>
+        </div>
 
-          <div style={analysisGrid}>
-            <div style={analysisCard}>
-              <p style={analysisTitle}>🧠 Score Marché</p>
-              <h2>{marketScore}</h2>
-              <p style={analysisDesc}>Basé sur événements + news</p>
-            </div>
-            <div style={analysisCard}>
-              <p style={analysisTitle}>📊 Bias</p>
-              <h2 style={{ color: biasColor }}>{bias}</h2>
-              <p style={analysisDesc}>Direction globale du marché</p>
-            </div>
-            <div style={analysisCard}>
-              <p style={analysisTitle}>🇲🇦 Impact Maroc</p>
-              <h2 style={{ color: moroccoColor }}>{moroccoImpact}</h2>
-              <p style={analysisDesc}>Influence USD & inflation</p>
-            </div>
+        <div style={analysisGrid}>
+          <div style={analysisCard}>
+            <p style={analysisTitle}>🧠 Score Marché</p>
+            <h2>{marketScore}</h2>
+            <p style={analysisDesc}>Basé sur événements + news</p>
           </div>
-
-          <div style={analysisGrid}>
-            <div style={analysisCard}>
-              <p style={analysisTitle}>⏱️ Prochain Event</p>
-              {nextEvent ? (
-                <>
-                  <h3>{nextEvent.title}</h3>
-                  <p style={{ color: "#aaa" }}>Dans {getCountdown(nextEvent.date)}</p>
-                </>
-              ) : <p>Aucun event</p>}
-            </div>
-            <div style={analysisCard}>
-              <p style={analysisTitle}>💵 USD Direction</p>
-              <h2 style={{ color: usdColor }}>{usdBias}</h2>
-              <p style={analysisDesc}>Basé sur calendrier USD</p>
-            </div>
-            <div style={analysisCard}>
-              <p style={analysisTitle}>🚨 Zone Trading</p>
-              <h2 style={{ color: riskColor }}>{riskZone}</h2>
-              <p style={analysisDesc}>Risque basé sur news imminentes</p>
-            </div>
+          <div style={analysisCard}>
+            <p style={analysisTitle}>📊 Bias</p>
+            <h2 style={{ color: biasColor }}>{bias}</h2>
+            <p style={analysisDesc}>Direction globale du marché</p>
           </div>
-
-          <div style={priceRow}>
-            <div style={card}>
-              <p>GOLD</p>
-              <h2 style={gold}>{market.gold ? market.gold.toFixed(2) : "..."}</h2>
-            </div>
-            <div style={card}>
-              <p>USD/MAD</p>
-              <h2>{market.usdmad ? market.usdmad.toFixed(3) : "..."}</h2>
-            </div>
+          <div style={analysisCard}>
+            <p style={analysisTitle}>🇲🇦 Impact Maroc</p>
+            <h2 style={{ color: moroccoColor }}>{moroccoImpact}</h2>
+            <p style={analysisDesc}>Influence USD & inflation</p>
           </div>
+        </div>
 
+        <div style={analysisGrid}>
+          <div style={analysisCard}>
+            <p style={analysisTitle}>⏱️ Prochain Event</p>
+            {nextEvent ? (
+              <>
+                <h3>{nextEvent.title}</h3>
+                <p style={{ color: "#aaa" }}>Dans {getCountdown(nextEvent.date)}</p>
+              </>
+            ) : <p>Aucun event</p>}
+          </div>
+          <div style={analysisCard}>
+            <p style={analysisTitle}>💵 USD Direction</p>
+            <h2 style={{ color: usdColor }}>{usdBias}</h2>
+            <p style={analysisDesc}>Basé sur calendrier USD</p>
+          </div>
+          <div style={analysisCard}>
+            <p style={analysisTitle}>🚨 Zone Trading</p>
+            <h2 style={{ color: riskColor }}>{riskZone}</h2>
+            <p style={analysisDesc}>Risque basé sur news imminentes</p>
+          </div>
+        </div>
+
+        <div style={priceRow}>
           <div style={card}>
-            <h2 style={title}>📅 Événements importants</h2>
-            {importantEvents.length === 0 ? <p>Aucun événement important</p> : 
-              importantEvents.map((e, i) => (
-                <p key={i} style={item}>
-                  {e.date ? new Date(e.date).toLocaleTimeString("fr-FR", {hour: "2-digit", minute: "2-digit"}) : "--"} • {e.title} <span style={{ color: "#ff4d4d" }}>🔴</span>
-                </p>
-              ))
-            }
+            <p>GOLD</p>
+            <h2 style={gold}>{market.gold ? market.gold.toFixed(2) : "..."}</h2>
           </div>
-
           <div style={card}>
-            <h2 style={title}>📰 News importantes</h2>
-            {topNews.length === 0 ? <p>Aucune news</p> : 
-              topNews.map((n, i) => <p key={i} style={item}>• {n.title}</p>)
-            }
+            <p>USD/MAD</p>
+            <h2>{market.usdmad ? market.usdmad.toFixed(3) : "..."}</h2>
           </div>
+        </div>
+
+        <div style={card}>
+          <h2 style={title}>📅 Événements importants</h2>
+          {importantEvents.length === 0 ? <p>Aucun événement important</p> : 
+            importantEvents.map((e, i) => (
+              <p key={i} style={item}>
+                {e.date ? new Date(e.date).toLocaleTimeString("fr-FR", {hour: "2-digit", minute: "2-digit"}) : "--"} • {e.title} <span style={{ color: "#ff4d4d" }}>🔴</span>
+              </p>
+            ))
+          }
+        </div>
+
+        <div style={card}>
+          <h2 style={title}>📰 News importantes</h2>
+          {topNews.length === 0 ? <p>Aucune news</p> : 
+            topNews.map((n, i) => <p key={i} style={item}>• {n.title}</p>)
+          }
         </div>
       </div>
     </div>
@@ -182,28 +180,25 @@ export default function Home() {
 
 /* ---------------- STYLES ---------------- */
 const container = { padding: "20px", background: "#020617", minHeight: "100vh", color: "white" };
-const hero = { background: "linear-gradient(135deg, #0b1e3a, #071530)", padding: "30px", borderRadius: "12px", marginBottom: "30px" };
-const heroTitle = { fontSize: "24px", marginBottom: "10px" };
-const heroText = { color: "#aaa", fontSize: "14px" };
-const cta = { marginRight: "10px", padding: "10px 15px", background: "#facc15", color: "#000", borderRadius: "6px", textDecoration: "none", fontWeight: "bold", fontSize: "13px" };
-const ctaSecondary = { padding: "10px 15px", background: "#071530", color: "#fff", borderRadius: "6px", textDecoration: "none", fontSize: "13px" };
-const priceRow = { display: "grid", gap: "15px", marginBottom: "30px", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))" };
-const card = { background: "#0b1e3a", padding: "20px", borderRadius: "12px", marginBottom: "20px" };
-const title = { marginBottom: "10px", fontSize: "18px" };
-const item = { marginBottom: "8px", color: "#ddd", fontSize: "14px" };
-const gold = { color: "#facc15" };
-const analysisGrid = { display: "flex", gap: "20px", marginBottom: "30px", flexWrap: "nowrap" as const };
-const analysisCard = { flex: "0 0 280px", background: "#0b1e3a", padding: "20px", borderRadius: "12px", boxShadow: "0 10px 30px rgba(0,0,0,0.4)" };
-const analysisTitle = { color: "#aaa", fontSize: "13px", marginBottom: "5px" };
-const analysisDesc = { color: "#777", fontSize: "12px" };
-const contentWidthLock = { 
-  width: "100%", 
-  maxWidth: "1200px", // Limite la largeur sur PC pour que ce soit beau
-  margin: "0 auto",    // Centre le contenu
-  paddingBottom: "20px" 
-};
+const contentWidthLock = { width: "100%", maxWidth: "1200px", margin: "0 auto", paddingBottom: "20px" };
 
-const horizontalScrollWrapper = { 
-  width: "100%",
-  overflowX: "hidden" as const // Empêche le défilement horizontal inutile
-};
+const hero = { background: "linear-gradient(135deg, #0b1e3a, #071530)", padding: "30px", borderRadius: "12px", marginBottom: "30px" };
+const heroTitle = { fontSize: "24px", marginBottom: "10px", lineHeight: "1.3" };
+const heroText = { color: "#aaa", fontSize: "14px", marginBottom: "20px" };
+
+const ctaContainer = { display: "flex", gap: "10px", flexWrap: "wrap" as const };
+const cta = { padding: "12px 20px", background: "#facc15", color: "#000", borderRadius: "6px", textDecoration: "none", fontWeight: "bold", fontSize: "14px", textAlign: "center" as const, flex: "1 1 auto" };
+const ctaSecondary = { padding: "12px 20px", background: "#1e293b", color: "#fff", borderRadius: "6px", textDecoration: "none", fontSize: "14px", textAlign: "center" as const, flex: "1 1 auto" };
+
+// On utilise Grid pour régler le bug sur mobile : les cartes s'empileront proprement
+const analysisGrid = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px", marginBottom: "30px" };
+const analysisCard = { background: "#0b1e3a", padding: "20px", borderRadius: "12px", boxShadow: "0 10px 30px rgba(0,0,0,0.2)", border: "1px solid #1e293b" };
+
+const analysisTitle = { color: "#aaa", fontSize: "13px", marginBottom: "8px" };
+const analysisDesc = { color: "#777", fontSize: "12px", marginTop: "8px" };
+
+const priceRow = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "20px", marginBottom: "30px" };
+const card = { background: "#0b1e3a", padding: "20px", borderRadius: "12px", marginBottom: "20px", border: "1px solid #1e293b" };
+const title = { marginBottom: "15px", fontSize: "18px", borderBottom: "1px solid #1e293b", paddingBottom: "10px" };
+const item = { marginBottom: "12px", color: "#ddd", fontSize: "14px", lineHeight: "1.4" };
+const gold = { color: "#facc15" };
