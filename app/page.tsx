@@ -95,7 +95,9 @@ export default function Home() {
 
   return (
     <div style={container}>
-      <div style={contentWidthLock}>
+      {/* WRAPPER PRINCIPAL : Bloque la largeur pour éviter le bug du zoom */}
+      <div style={pageWrapper}>
+        
         <div style={hero}>
           <h1 style={heroTitle}>Analyse économique Maroc 🇲🇦</h1>
           <p style={heroText}>Comprenez l’impact des news mondiales sur le marché marocain</p>
@@ -105,43 +107,43 @@ export default function Home() {
           </div>
         </div>
 
-        <div style={analysisGrid}>
-          <div style={analysisCard}>
-            <p style={analysisTitle}>🧠 Score Marché</p>
-            <h2>{marketScore}</h2>
-            <p style={analysisDesc}>Basé sur événements + news</p>
-          </div>
-          <div style={analysisCard}>
-            <p style={analysisTitle}>📊 Bias</p>
-            <h2 style={{ color: biasColor }}>{bias}</h2>
-            <p style={analysisDesc}>Direction globale du marché</p>
-          </div>
-          <div style={analysisCard}>
-            <p style={analysisTitle}>🇲🇦 Impact Maroc</p>
-            <h2 style={{ color: moroccoColor }}>{moroccoImpact}</h2>
-            <p style={analysisDesc}>Influence USD & inflation</p>
-          </div>
-        </div>
-
-        <div style={analysisGrid}>
-          <div style={analysisCard}>
-            <p style={analysisTitle}>⏱️ Prochain Event</p>
-            {nextEvent ? (
-              <>
-                <h3>{nextEvent.title}</h3>
-                <p style={{ color: "#aaa" }}>Dans {getCountdown(nextEvent.date)}</p>
-              </>
-            ) : <p>Aucun event</p>}
-          </div>
-          <div style={analysisCard}>
-            <p style={analysisTitle}>💵 USD Direction</p>
-            <h2 style={{ color: usdColor }}>{usdBias}</h2>
-            <p style={analysisDesc}>Basé sur calendrier USD</p>
-          </div>
-          <div style={analysisCard}>
-            <p style={analysisTitle}>🚨 Zone Trading</p>
-            <h2 style={{ color: riskColor }}>{riskZone}</h2>
-            <p style={analysisDesc}>Risque basé sur news imminentes</p>
+        {/* SECTION CARTES : Défilement horizontal conservé mais propre */}
+        <div style={scrollContainer}>
+          <div style={analysisGrid}>
+            <div style={analysisCard}>
+              <p style={analysisTitle}>🧠 Score Marché</p>
+              <h2>{marketScore}</h2>
+              <p style={analysisDesc}>Basé sur événements + news</p>
+            </div>
+            <div style={analysisCard}>
+              <p style={analysisTitle}>📊 Bias</p>
+              <h2 style={{ color: biasColor }}>{bias}</h2>
+              <p style={analysisDesc}>Direction globale du marché</p>
+            </div>
+            <div style={analysisCard}>
+              <p style={analysisTitle}>🇲🇦 Impact Maroc</p>
+              <h2 style={{ color: moroccoColor }}>{moroccoImpact}</h2>
+              <p style={analysisDesc}>Influence USD & inflation</p>
+            </div>
+            <div style={analysisCard}>
+              <p style={analysisTitle}>⏱️ Prochain Event</p>
+              {nextEvent ? (
+                <>
+                  <h3 style={{fontSize: '16px'}}>{nextEvent.title}</h3>
+                  <p style={{ color: "#aaa" }}>Dans {getCountdown(nextEvent.date)}</p>
+                </>
+              ) : <p>Aucun event</p>}
+            </div>
+            <div style={analysisCard}>
+              <p style={analysisTitle}>💵 USD Direction</p>
+              <h2 style={{ color: usdColor }}>{usdBias}</h2>
+              <p style={analysisDesc}>Basé sur calendrier USD</p>
+            </div>
+            <div style={analysisCard}>
+              <p style={analysisTitle}>🚨 Zone Trading</p>
+              <h2 style={{ color: riskColor }}>{riskZone}</h2>
+              <p style={analysisDesc}>Risque basé sur news imminentes</p>
+            </div>
           </div>
         </div>
 
@@ -178,27 +180,28 @@ export default function Home() {
   );
 }
 
-/* ---------------- STYLES ---------------- */
-const container = { padding: "20px", background: "#020617", minHeight: "100vh", color: "white" };
-const contentWidthLock = { width: "100%", maxWidth: "1200px", margin: "0 auto", paddingBottom: "20px" };
+/* ---------------- STYLES CORRIGÉS ---------------- */
+const container = { background: "#020617", minHeight: "100vh", color: "white", width: "100%", overflowX: "hidden" as const };
+const pageWrapper = { maxWidth: "1200px", margin: "0 auto", padding: "20px" };
 
 const hero = { background: "linear-gradient(135deg, #0b1e3a, #071530)", padding: "30px", borderRadius: "12px", marginBottom: "30px" };
-const heroTitle = { fontSize: "24px", marginBottom: "10px", lineHeight: "1.3" };
+const heroTitle = { fontSize: "24px", marginBottom: "10px" };
 const heroText = { color: "#aaa", fontSize: "14px", marginBottom: "20px" };
 
-const ctaContainer = { display: "flex", gap: "10px", flexWrap: "wrap" as const };
-const cta = { padding: "12px 20px", background: "#facc15", color: "#000", borderRadius: "6px", textDecoration: "none", fontWeight: "bold", fontSize: "14px", textAlign: "center" as const, flex: "1 1 auto" };
-const ctaSecondary = { padding: "12px 20px", background: "#1e293b", color: "#fff", borderRadius: "6px", textDecoration: "none", fontSize: "14px", textAlign: "center" as const, flex: "1 1 auto" };
+const ctaContainer = { display: "flex", gap: "10px" };
+const cta = { padding: "10px 18px", background: "#facc15", color: "#000", borderRadius: "6px", textDecoration: "none", fontWeight: "bold", fontSize: "14px", display: "inline-block" };
+const ctaSecondary = { padding: "10px 18px", background: "#1e293b", color: "#fff", borderRadius: "6px", textDecoration: "none", fontSize: "14px", display: "inline-block" };
 
-// On utilise Grid pour régler le bug sur mobile : les cartes s'empileront proprement
-const analysisGrid = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px", marginBottom: "30px" };
-const analysisCard = { background: "#0b1e3a", padding: "20px", borderRadius: "12px", boxShadow: "0 10px 30px rgba(0,0,0,0.2)", border: "1px solid #1e293b" };
+// On permet le scroll horizontal seulement sur cette ligne
+const scrollContainer = { width: "100%", overflowX: "auto" as const, marginBottom: "30px", paddingBottom: "10px" };
+const analysisGrid = { display: "flex", gap: "20px", width: "max-content" };
+const analysisCard = { width: "260px", background: "#0b1e3a", padding: "20px", borderRadius: "12px", border: "1px solid #1e293b" };
 
-const analysisTitle = { color: "#aaa", fontSize: "13px", marginBottom: "8px" };
-const analysisDesc = { color: "#777", fontSize: "12px", marginTop: "8px" };
+const analysisTitle = { color: "#aaa", fontSize: "12px", marginBottom: "8px" };
+const analysisDesc = { color: "#555", fontSize: "11px", marginTop: "5px" };
 
 const priceRow = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "20px", marginBottom: "30px" };
 const card = { background: "#0b1e3a", padding: "20px", borderRadius: "12px", marginBottom: "20px", border: "1px solid #1e293b" };
-const title = { marginBottom: "15px", fontSize: "18px", borderBottom: "1px solid #1e293b", paddingBottom: "10px" };
-const item = { marginBottom: "12px", color: "#ddd", fontSize: "14px", lineHeight: "1.4" };
+const title = { marginBottom: "15px", fontSize: "18px" };
+const item = { marginBottom: "10px", color: "#ddd", fontSize: "14px" };
 const gold = { color: "#facc15" };
