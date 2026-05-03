@@ -29,6 +29,8 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+  
       </head>
       <body className={inter.className} style={{ margin: 0, padding: 0, backgroundColor: "#020617", color: "white" }}>
         <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", width: "100%" }}>

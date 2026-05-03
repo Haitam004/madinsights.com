@@ -196,5 +196,14 @@ const analysisGrid = { display: "flex", gap: "20px", marginBottom: "30px", flexW
 const analysisCard = { flex: "0 0 280px", background: "#0b1e3a", padding: "20px", borderRadius: "12px", boxShadow: "0 10px 30px rgba(0,0,0,0.4)" };
 const analysisTitle = { color: "#aaa", fontSize: "13px", marginBottom: "5px" };
 const analysisDesc = { color: "#777", fontSize: "12px" };
-const horizontalScrollWrapper = { width: "100%", overflowX: "auto" as const, WebkitOverflowScrolling: "touch" as const };
-const contentWidthLock = { minWidth: "900px", paddingBottom: "20px" };
+const contentWidthLock = { 
+  width: "100%", 
+  maxWidth: "1200px", // Limite la largeur sur PC pour que ce soit beau
+  margin: "0 auto",    // Centre le contenu
+  paddingBottom: "20px" 
+};
+
+const horizontalScrollWrapper = { 
+  width: "100%",
+  overflowX: "hidden" as const // Empêche le défilement horizontal inutile
+};

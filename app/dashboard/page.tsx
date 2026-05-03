@@ -1,75 +1,76 @@
 "use client";
 
-import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import Link from 'next/link';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 
-// Exemple de données pour le graphique (à remplacer plus tard par ton API)
+// Données fictives pour l'instant (on les connectera à ton API plus tard)
 const data = [
-  { name: 'Lun', price: 10.05 },
-  { name: 'Mar', price: 10.08 },
-  { name: 'Mer', price: 10.04 },
-  { name: 'Jeu', price: 10.12 },
-  { name: 'Ven', price: 10.10 },
+  { date: '24/04', price: 10.02 },
+  { date: '25/04', price: 10.05 },
+  { date: '26/04', price: 10.03 },
+  { date: '27/04', price: 10.08 },
+  { date: '28/04', price: 10.06 },
+  { date: '29/04', price: 10.12 },
+  { date: '30/04', price: 10.10 },
 ];
 
 export default function Dashboard() {
   return (
-    <div style={container}>
-      <div style={content}>
-        <h1 style={title}>Tableau de Bord Marché</h1>
+    <div style={{ padding: "20px", background: "#020617", minHeight: "100vh", color: "white" }}>
+      <h1 style={{ fontSize: "24px", marginBottom: "20px" }}>Tableau de Bord Analytique</h1>
+      
+      <div style={{ display: "grid", gap: "20px", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}>
         
-        {/* 1. MINI CARTES DE PRIX (Forex & Or) */}
-        <div style={statsGrid}>
-          <div style={statCard}>
-            <p style={statLabel}>USD / MAD</p>
-            <p style={statValue}>10.10 <span style={{fontSize: '12px', color: '#4ade80'}}>+0.2%</span></p>
-          </div>
-          <div style={statCard}>
-            <p style={statLabel}>EUR / MAD</p>
-            <p style={statValue}>10.85 <span style={{fontSize: '12px', color: '#ff4d4d'}}>-0.1%</span></p>
-          </div>
-          <div style={statCard}>
-            <p style={statLabel}>Or (g)</p>
-            <p style={statValue}>745.20 MAD</p>
-          </div>
-        </div>
-
-        {/* 2. GRAPHIQUE PRINCIPAL */}
-        <div style={chartSection}>
-          <h2 style={sectionTitle}>Évolution USD/MAD (7 derniers jours)</h2>
+        {/* CARTE GRAPHIQUE USD/MAD */}
+        <div style={{ background: "#0b1e3a", padding: "20px", borderRadius: "12px", border: "1px solid #1e293b" }}>
+          <h3 style={{ marginBottom: "15px", color: "#facc15" }}>Évolution USD/MAD</h3>
           <div style={{ width: '100%', height: 300 }}>
-            <ResponsiveContainer>
-              <LineChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                <XAxis dataKey="name" stroke="#94a3b8" />
-                <YAxis domain={['auto', 'auto']} stroke="#94a3b8" />
-                <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b' }} />
-                <Line type="monotone" dataKey="price" stroke="#facc15" strokeWidth={3} dot={{ fill: '#facc15' }} />
-              </LineChart>
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={data}>
+                <defs>
+                  <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#facc15" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#facc15" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                <XAxis dataKey="date" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis domain={['dataMin - 0.05', 'dataMax + 0.05']} stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip 
+                  contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px' }}
+                  itemStyle={{ color: '#facc15' }}
+                />
+                <Area type="monotone" dataKey="price" stroke="#facc15" strokeWidth={3} fillOpacity={1} fill="url(#colorPrice)" />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* 3. APPEL À L'ACTION STRATÉGIQUE */}
-        <div style={ctaBox}>
-          <p>Maximisez vos profits sur le Forex et l'Or avec <strong>Exness</strong>.</p>
-          <a href="https://one.exnessonelink.com/a/o9d6u5m1ye" target="_blank" style={ctaButton}>Démarrer le Trading</a>
+        {/* STATISTIQUES RAPIDES */}
+        <div style={{ background: "#0b1e3a", padding: "20px", borderRadius: "12px", border: "1px solid #1e293b" }}>
+          <h3 style={{ marginBottom: "15px" }}>Indicateurs Clés</h3>
+          <div style={statRow}>
+            <span>Volatilité Hebdo</span>
+            <span style={{ color: "#4ade80" }}>1.2%</span>
+          </div>
+          <div style={statRow}>
+            <span>Tendance MAD</span>
+            <span style={{ color: "#ff4d4d" }}>Baissière</span>
+          </div>
+          <div style={statRow}>
+            <span>Volume estimé</span>
+            <span>Low</span>
+          </div>
         </div>
+
       </div>
     </div>
   );
 }
 
-/* Styles */
-const container = { background: "#020617", minHeight: "100vh", color: "white", padding: "20px" };
-const content = { maxWidth: "1000px", margin: "0 auto" };
-const title = { fontSize: "24px", marginBottom: "30px", fontWeight: "bold" };
-const statsGrid = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "20px", marginBottom: "30px" };
-const statCard = { background: "#0b1e3a", padding: "20px", borderRadius: "12px", border: "1px solid #1e293b" };
-const statLabel = { color: "#94a3b8", fontSize: "14px", margin: 0 };
-const statValue = { fontSize: "22px", fontWeight: "bold", margin: "5px 0 0 0" };
-const chartSection = { background: "#0b1e3a", padding: "20px", borderRadius: "12px", border: "1px solid #1e293b", marginBottom: "30px" };
-const sectionTitle = { fontSize: "18px", marginBottom: "20px", color: "#facc15" };
-const ctaBox = { background: "#1e293b", padding: "20px", borderRadius: "12px", textAlign: "center" as const, display: "flex", flexDirection: "column" as const, alignItems: "center", gap: "15px" };
-const ctaButton = { background: "#facc15", color: "#000", padding: "10px 25px", borderRadius: "8px", fontWeight: "bold", textDecoration: "none" };
+const statRow = {
+  display: "flex",
+  justifyContent: "space-between",
+  padding: "12px 0",
+  borderBottom: "1px solid #1e293b",
+  fontSize: "14px"
+};
