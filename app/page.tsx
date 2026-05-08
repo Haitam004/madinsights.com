@@ -12,6 +12,9 @@ export default function Home() {
   // État pour le Journal de Trading
   const [trades, setTrades] = useState<any[]>([]);
   
+  // NOUVEAU : État pour le Capital (persistant)
+  const [balance, setBalance] = useState("1000");
+
   // État pour le formulaire d'ajout
   const [newTrade, setNewTrade] = useState({ pair: "GOLD", entry: "", sl: "", tp: "", risk: "1" });
 
@@ -29,6 +32,12 @@ export default function Home() {
       }
     }
 
+    // Charger le capital du localStorage
+    const savedBalance = localStorage.getItem("trading_balance");
+    if (savedBalance) {
+      setBalance(savedBalance);
+    }
+
     fetch("/api/market").then(res => res.json()).then(setMarket).catch(() => setMarket({}));
     fetch("/api/news").then(res => res.json()).then(setNews).catch(() => setNews([]));
     fetch("/api/calendar").then(res => res.json()).then(setCalendar).catch(() => setCalendar([]));
@@ -38,8 +47,33 @@ export default function Home() {
   useEffect(() => {
     if (isMounted) {
       localStorage.setItem("trading_journal", JSON.stringify(trades));
+      localStorage.setItem("trading_balance", balance);
     }
-  }, [trades, isMounted]);
+  }, [trades, balance, isMounted]);
+
+  // --- NOUVEAU : CALCULATEUR DE LOTS ---
+  const calculateLots = () => {
+    const entry = parseFloat(newTrade.entry);
+    const sl = parseFloat(newTrade.sl);
+    const riskPercent = parseFloat(newTrade.risk);
+    const cap = parseFloat(balance);
+
+    if (!entry || !sl || !cap || entry === sl) return "0.00";
+
+    const amountToRisk = cap * (riskPercent / 100);
+    const pipsRisk = Math.abs(entry - sl);
+    
+    let lots = 0;
+    if (newTrade.pair === "GOLD") {
+      // Pour l'Or : 1 lot = 1$ de mouvement par once = 100$
+      lots = amountToRisk / (pipsRisk * 100);
+    } else {
+      // Pour Forex (Standard EUR/USD)
+      lots = amountToRisk / (pipsRisk * 100000); 
+    }
+
+    return lots.toFixed(2);
+  };
 
   // --- LOGIQUE DU JOURNAL ---
   const addTrade = () => {
@@ -56,6 +90,7 @@ export default function Home() {
       sl: newTrade.sl,
       risk: newTrade.risk,
       rrr: `1:${rrr}`,
+      lots: calculateLots(), // NOUVEAU : Sauvegarde du lot
       status: "En cours",
       date: new Date().toLocaleDateString("fr-FR")
     };
@@ -120,10 +155,23 @@ export default function Home() {
     <div style={container}>
       <div style={pageWrapper}>
         
-        {/* HERO SECTION */}
+        {/* HERO SECTION AVEC CAPITAL */}
         <div style={hero}>
-          <h1 style={heroTitle}>Analyse économique Maroc 🇲🇦</h1>
-          <p style={heroText}>Interface de décision en temps réel pour le marché local.</p>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", marginBottom: "20px" }}>
+            <div>
+              <h1 style={heroTitle}>Analyse économique Maroc 🇲🇦</h1>
+              <p style={heroText}>Interface de décision en temps réel pour le marché local.</p>
+            </div>
+            <div style={balanceCard}>
+              <p style={{ fontSize: "11px", color: "#94a3b8", margin: "0 0 5px 0", fontWeight: "bold" }}>MON CAPITAL (USD)</p>
+              <input 
+                style={balanceInput} 
+                type="number" 
+                value={balance} 
+                onChange={(e) => setBalance(e.target.value)} 
+              />
+            </div>
+          </div>
           <div style={ctaContainer}>
             <Link href="/calendar" style={cta}>📅 Voir Calendrier</Link>
             <Link href="/news" style={ctaSecondary}>📰 Actualités</Link>
@@ -170,17 +218,20 @@ export default function Home() {
         <div style={priceRow}>
           <div style={card}>
             <p style={analysisTitle}>GOLD (XAU/USD)</p>
-            <h2 style={{ color: "#facc15", fontSize: '24px' }}>{market.gold || "Chargement..."}</h2>
+            <h2 style={{ color: "#facc15", fontSize: '24px', margin: "10px 0 0 0" }}>{market.gold || "Chargement..."}</h2>
           </div>
           <div style={card}>
             <p style={analysisTitle}>USD/MAD (Spot)</p>
-            <h2 style={{ fontSize: '24px' }}>{market.usdmad || "Chargement..."}</h2>
+            <h2 style={{ fontSize: '24px', margin: "10px 0 0 0" }}>{market.usdmad || "Chargement..."}</h2>
           </div>
         </div>
 
         {/* 3. CONFIGURATION DU JOURNAL DE TRADING */}
         <div style={card}>
-          <h2 style={sectionTitle}>📓 Nouveau Trade</h2>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px", flexWrap: "wrap", gap: "10px" }}>
+            <h2 style={{ fontSize: "16px", fontWeight: "bold", margin: 0 }}>📓 Nouveau Trade</h2>
+            <div style={lotBadge}>Volume suggéré : <b>{calculateLots()} Lots</b></div>
+          </div>
           <div style={formGrid}>
             <select 
               style={inputStyle} 
@@ -208,7 +259,7 @@ export default function Home() {
         </div>
 
         <div style={card}>
-          <h2 style={sectionTitle}>📜 Historique des Positions</h2>
+          <h2 style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "15px", marginTop: 0 }}>📜 Historique des Positions</h2>
           <div style={{ overflowX: "auto" }}>
             <table style={tableStyle}>
               <thead>
@@ -216,6 +267,7 @@ export default function Home() {
                   <th style={tableTh}>Date</th>
                   <th style={tableTh}>Marché</th>
                   <th style={tableTh}>SL</th>
+                  <th style={tableTh}>Lots</th> {/* NOUVELLE COLONNE */}
                   <th style={tableTh}>Risque</th>
                   <th style={tableTh}>RRR</th>
                   <th style={tableTh}>Statut</th>
@@ -223,12 +275,13 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody>
-                {trades.length === 0 ? <tr><td colSpan={7} style={{textAlign:'center', padding:'20px', color:'#475569'}}>Aucun trade enregistré.</td></tr> : 
+                {trades.length === 0 ? <tr><td colSpan={8} style={{textAlign:'center', padding:'20px', color:'#475569'}}>Aucun trade enregistré.</td></tr> : 
                   trades.map((trade) => (
                     <tr key={trade.id} style={tableRow}>
                       <td style={tableTd}>{trade.date}</td>
                       <td style={tableTd}><b>{trade.pair}</b></td>
                       <td style={tableTd}>{trade.sl}</td>
+                      <td style={tableTd}>{trade.lots}</td> {/* NOUVELLE DONNÉE */}
                       <td style={tableTd}>{trade.risk}%</td>
                       <td style={tableTd}>{trade.rrr}</td>
                       <td style={tableTd}>
@@ -256,7 +309,7 @@ export default function Home() {
         {/* 4. ÉVÉNEMENTS & NEWS */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "20px" }}>
           <div style={card}>
-            <h2 style={sectionTitle}>📅 Calendrier High Impact</h2>
+            <h2 style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "15px", marginTop: 0 }}>📅 Calendrier High Impact</h2>
             {calendar.filter(e => e.impact === "high").length === 0 ? <p style={emptyText}>Aucun événement critique</p> : 
               calendar.filter(e => e.impact === "high").slice(0, 3).map((e, i) => (
                 <p key={i} style={listItem}>• {e.title} <span style={{ color: "#ff4d4d" }}>🔴</span></p>
@@ -264,7 +317,7 @@ export default function Home() {
             }
           </div>
           <div style={card}>
-            <h2 style={sectionTitle}>📰 News Récentes</h2>
+            <h2 style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "15px", marginTop: 0 }}>📰 News Récentes</h2>
             {news.length === 0 ? <p style={emptyText}>En attente de news...</p> : 
               news.slice(0, 3).map((n, i) => <p key={i} style={listItem}>• {n.title}</p>)
             }
@@ -281,8 +334,13 @@ const container = { background: "#020617", minHeight: "100vh", color: "white", w
 const pageWrapper = { maxWidth: "1200px", margin: "0 auto", padding: "20px" };
 
 const hero = { background: "#0b1e3a", padding: "30px", borderRadius: "16px", marginBottom: "30px", border: "1px solid #1e293b" };
-const heroTitle = { fontSize: "28px", fontWeight: "bold", marginBottom: "10px" };
-const heroText = { color: "#94a3b8", marginBottom: "25px", fontSize: "14px" };
+const heroTitle = { fontSize: "28px", fontWeight: "bold", marginBottom: "10px", marginTop: 0 };
+const heroText = { color: "#94a3b8", marginBottom: "0", fontSize: "14px" };
+
+// NOUVEAUX STYLES POUR LE CALCULATEUR
+const balanceCard = { background: "#1e293b", padding: "12px 15px", borderRadius: "8px", border: "1px solid #334155", minWidth: "150px" };
+const balanceInput = { background: "transparent", border: "none", color: "#facc15", fontSize: "22px", fontWeight: "bold", width: "100%", outline: "none", padding: 0 };
+const lotBadge = { background: "#0ea5e9", color: "white", padding: "6px 12px", borderRadius: "20px", fontSize: "13px" };
 
 const ctaContainer = { display: "flex", gap: "12px", flexWrap: "wrap" as const };
 const cta = { padding: "10px 20px", background: "#facc15", color: "#000", borderRadius: "8px", textDecoration: "none", fontWeight: "bold", fontSize: "13px" };
@@ -291,14 +349,13 @@ const ctaSecondary = { padding: "10px 20px", background: "#1e293b", color: "#fff
 const analysisGrid = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "15px", marginBottom: "30px" };
 const analysisCard = { background: "#0b1e3a", padding: "20px", borderRadius: "16px", border: "1px solid #1e293b" };
 
-const analysisTitle = { color: "#94a3b8", fontSize: "11px", marginBottom: "8px", textTransform: "uppercase" as const };
+const analysisTitle = { color: "#94a3b8", fontSize: "11px", marginBottom: "8px", textTransform: "uppercase" as const, marginTop: 0 };
 const cardValue = { fontSize: "20px", fontWeight: "bold", margin: "5px 0" };
-const analysisDesc = { color: "#475569", fontSize: "11px" };
+const analysisDesc = { color: "#475569", fontSize: "11px", marginBottom: 0 };
 
 const priceRow = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "20px", marginBottom: "25px" };
 const card = { background: "#0b1e3a", padding: "24px", borderRadius: "16px", border: "1px solid #1e293b", marginBottom: "20px" };
 
-const sectionTitle = { fontSize: "16px", fontWeight: "bold", marginBottom: "15px" };
 const listItem = { marginBottom: "10px", color: "#cbd5e1", fontSize: "13px" };
 const emptyText = { color: "#475569", fontSize: "13px" };
 
