@@ -71,9 +71,7 @@ def recuperer_et_stocker():
         except Exception as e:
             print(f"❌ Erreur sur {nom_source} : {e}")
 
-# Boucle d'automatisation
 if __name__ == "__main__":
-    while True: #
-        recuperer_et_stocker()
-        print("\n😴 En attente pendant 30 minutes...") #
-        time.sleep(1800) # 1800 secondes = 30 minutes
+    recuperer_et_stocker()
+    print("\n✅ Analyse terminée avec succès !")
+    # Pas de while True, pas de sleep
