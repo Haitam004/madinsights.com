@@ -1,4 +1,5 @@
-'use client';
+"use client";
+
 import React, { useEffect, useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { TrendingUp, Info, Landmark, DollarSign, Globe, ExternalLink } from 'lucide-react';
@@ -17,7 +18,6 @@ interface NewsItem {
   link: string;
 }
 
-// Nouvelle interface pour la Bourse
 interface StockItem {
   ticker: string;
   nom: string;
@@ -27,34 +27,41 @@ interface StockItem {
 
 export default function MarocPulse() {
   const [news, setNews] = useState<NewsItem[]>([]);
-  const [stocks, setStocks] = useState<StockItem[]>([]); // State pour la bourse
+  const [stocks, setStocks] = useState<StockItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        // 1. Récupération des News
-        const { data: newsData } = await supabase
-          .from('maroc_pulse')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(5);
+  // 🔄 Fonction isolée pour permettre l'auto-refresh
+  async function fetchData() {
+    try {
+      // 1. Récupération des News
+      const { data: newsData } = await supabase
+        .from('maroc_pulse')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(5);
 
-        // 2. Récupération de la Bourse
-        const { data: bourseData } = await supabase
-          .from('maroc_bourse')
-          .select('*')
-          .order('nom', { ascending: true });
+      // 2. Récupération de la Bourse
+      const { data: bourseData } = await supabase
+        .from('maroc_bourse')
+        .select('*')
+        .order('nom', { ascending: true });
 
-        if (newsData) setNews(newsData);
-        if (bourseData) setStocks(bourseData);
+      if (newsData) setNews(newsData);
+      if (bourseData) setStocks(bourseData);
 
-      } catch (err) {
-        console.error("Erreur de connexion:", err);
-      }
-      setLoading(false);
+    } catch (err) {
+      console.error("Erreur de connexion:", err);
     }
-    fetchData();
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    fetchData(); // Chargement initial au montage de la page
+
+    // ⏱️ AUTOMATISATION : Rafraîchissement automatique toutes les 60 secondes
+    const interval = setInterval(fetchData, 60000);
+
+    return () => clearInterval(interval); // Nettoyage propre du timer
   }, []);
 
   const containerVariants: Variants = {
@@ -78,8 +85,19 @@ export default function MarocPulse() {
   ];
 
   return (
-    <div style={{ minHeight: "100vh", background: "#020617", color: "#f8fafc", padding: "40px", fontFamily: "sans-serif" }}>
+    <div className="pulse-wrapper" style={{ minHeight: "100vh", background: "#020617", color: "#f8fafc", fontFamily: "sans-serif" }}>
       
+      {/* 🎨 CSS RESPONSIVE INTERNE (Préserve ton design à 100% sur PC) */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .pulse-wrapper { padding: 40px; }
+        .pulse-main-grid { display: grid; grid-template-columns: 1.5fr 1fr; }
+        
+        @media (max-width: 1024px) {
+          .pulse-wrapper { padding: 15px; }
+          .pulse-main-grid { grid-template-columns: 1fr !important; }
+        }
+      `}} />
+
       <motion.header 
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -88,7 +106,7 @@ export default function MarocPulse() {
         <h1 style={{ fontSize: "32px", fontWeight: "bold", borderLeft: "5px solid #16a34a", paddingLeft: "20px", margin: "0" }}>
           MAROC MARKET PULSE
         </h1>
-        <p style={{ color: "#94a3b8", marginTop: "10px" }}>Données macro-économiques et IA-Analytics en temps réel.</p>
+        <p style={{ color: "#94a3b8", marginTop: "10px" }}>Données macro-économiques et IA-Analytics en temps réel (mise à jour automatique).</p>
       </motion.header>
 
       {/* Grid des indicateurs macro */}
@@ -110,7 +128,8 @@ export default function MarocPulse() {
         ))}
       </motion.div>
 
-      <div style={{ maxWidth: "1200px", margin: "0 auto", display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: "30px" }}>
+      {/* Changement ici : Application de la classe pulse-main-grid pour gérer le mobile */}
+      <div className="pulse-main-grid" style={{ maxWidth: "1200px", margin: "0 auto", gap: "30px" }}>
         
         {/* SECTION BOURSE DYNAMIQUE */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={cardStyle}>
