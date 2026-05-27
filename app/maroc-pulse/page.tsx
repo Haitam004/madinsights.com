@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, Variants } from 'framer-motion';
-import { TrendingUp, Info, Landmark, DollarSign, Globe, ExternalLink } from 'lucide-react';
+import { TrendingUp, Info, Landmark, DollarSign, Globe, ExternalLink, Star } from 'lucide-react'; // 🌟 Ajout de Star
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -29,9 +29,30 @@ export default function MarocPulse() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [stocks, setStocks] = useState<StockItem[]>([]);
   const [loading, setLoading] = useState(true);
-  
-  // 🕒 State pour le statut de la bourse
   const [marketStatus, setMarketStatus] = useState({ isOpen: false, text: "Calcul du statut..." });
+  
+  // 🌟 State pour stocker les tickers favoris
+  const [watchlist, setWatchlist] = useState<string[]>([]);
+
+  // Charger la watchlist depuis le localStorage au démarrage
+  useEffect(() => {
+    const savedWatchlist = localStorage.getItem('mad_watchlist');
+    if (savedWatchlist) {
+      setWatchlist(JSON.parse(savedWatchlist));
+    }
+  }, []);
+
+  // Fonction pour ajouter/retirer un favori
+  const toggleWatchlist = (ticker: string) => {
+    let updatedWatchlist = [...watchlist];
+    if (updatedWatchlist.includes(ticker)) {
+      updatedWatchlist = updatedWatchlist.filter(t => t !== ticker);
+    } else {
+      updatedWatchlist.push(ticker);
+    }
+    setWatchlist(updatedWatchlist);
+    localStorage.setItem('mad_watchlist', JSON.stringify(updatedWatchlist));
+  };
 
   async function fetchData() {
     try {
@@ -61,7 +82,6 @@ export default function MarocPulse() {
     return () => clearInterval(interval);
   }, []);
 
-  // ⏱️ Horloge temps réel pour la Bourse de Casablanca
   useEffect(() => {
     function updateMarketStatus() {
       try {
@@ -80,8 +100,8 @@ export default function MarocPulse() {
 
         const isWeekend = day === 'Sat' || day === 'Sun';
         const currentMinutes = hour * 60 + minute;
-        const openMinutes = 9 * 60 + 30;   // 09:30
-        const closeMinutes = 15 * 60 + 30; // 15:30
+        const openMinutes = 9 * 60 + 30;
+        const closeMinutes = 15 * 60 + 30;
 
         if (!isWeekend && currentMinutes >= openMinutes && currentMinutes < closeMinutes) {
           const remainingMinutes = closeMinutes - currentMinutes;
@@ -108,7 +128,6 @@ export default function MarocPulse() {
     return () => clearInterval(statusInterval);
   }, []);
 
-  // 🧠 ÉTAPE 2 : Calcul dynamique de la jauge de sentiment IA
   const totalNews = news.length;
   const positiveNews = news.filter(item => item.sentiment === 'Positif').length;
   const negativeNews = news.filter(item => item.sentiment === 'Négatif').length;
@@ -232,15 +251,24 @@ export default function MarocPulse() {
             {stocks.length > 0 ? (
               stocks.map((stock) => {
                 const isPositive = stock.variation.startsWith('+');
+                const isStarred = watchlist.includes(stock.ticker); // 🌟 Vérifie si favori
                 return (
-                  <div key={stock.ticker} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px", background: "#1e293b", borderRadius: "8px" }}>
+                  <div key={stock.ticker} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px", background: "#1e293b", borderRadius: "8px", gap: "10px" }}>
                     
+                    {/* 🌟 Bouton Étoile Interactif */}
+                    <button 
+                      onClick={() => toggleWatchlist(stock.ticker)}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
+                    >
+                      <Star size={18} fill={isStarred ? "#facc15" : "none"} color={isStarred ? "#facc15" : "#64748b"} style={{ transition: "0.1s" }} />
+                    </button>
+
                     <div style={{ flex: 1, minWidth: "110px" }}>
                       <div style={{ fontWeight: "bold", fontSize: "14px" }}>{stock.nom}</div>
                       <div style={{ fontSize: "11px", color: "#64748b" }}>{stock.ticker}</div>
                     </div>
                     
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flex: 1, padding: "0 10px" }}>
+                    <div className="desktop-nav" style={{ display: "flex", alignItems: "center", justifyContent: "center", flex: 1, padding: "0 10px" }}>
                       <svg width="65" height="22" style={{ overflow: "visible" }}>
                         <polyline
                           fill="none"
@@ -278,7 +306,6 @@ export default function MarocPulse() {
             IA Insights (Live)
           </h2>
 
-          {/* 📊 Jauge de Sentiment Visuelle */}
           {!loading && news.length > 0 && (
             <div style={{ background: "#1e293b", padding: "12px", borderRadius: "8px", marginBottom: "25px", border: "1px solid #334155" }}>
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", marginBottom: "8px", fontWeight: "600" }}>
@@ -286,14 +313,12 @@ export default function MarocPulse() {
                 <span style={{ color: "#facc15" }}>{sentimentVerdict}</span>
               </div>
               
-              {/* Barre segmentée multicolore */}
               <div style={{ display: "flex", width: "100%", height: "8px", borderRadius: "4px", overflow: "hidden", background: "#334155" }}>
-                <div style={{ width: `${posPercent}%`, background: "#4ade80", transition: "width 0.5s ease" }} title={`Positif: ${Math.round(posPercent)}%`} />
-                <div style={{ width: `${neuPercent}%`, background: "#64748b", transition: "width 0.5s ease" }} title={`Neutre: ${Math.round(neuPercent)}%`} />
-                <div style={{ width: `${negPercent}%`, background: "#f87171", transition: "width 0.5s ease" }} title={`Négatif: ${Math.round(negPercent)}%`} />
+                <div style={{ width: `${posPercent}%`, background: "#4ade80", transition: "width 0.5s ease" }} />
+                <div style={{ width: `${neuPercent}%`, background: "#64748b", transition: "width 0.5s ease" }} />
+                <div style={{ width: `${negPercent}%`, background: "#f87171", transition: "width 0.5s ease" }} />
               </div>
 
-              {/* Légende en petits chiffres */}
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: "10px", color: "#64748b", marginTop: "6px", fontFamily: "monospace" }}>
                 <span>Acheteurs: {Math.round(posPercent)}%</span>
                 <span>Neutres: {Math.round(neuPercent)}%</span>
