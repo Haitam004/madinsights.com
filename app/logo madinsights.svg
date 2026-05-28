@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ca8a04" />
+      <stop offset="100%" stop-color="#facc15" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Fond sombre assorti à ton tableau de bord -->
+  <rect width="512" height="512" rx="128" fill="#020617" stroke="#1e293b" stroke-width="16"/>
+  
+  <!-- Graphique boursier en forme de 'M' dynamique -->
+  <path d="M130 370 V210 L215 310 L310 170 L400 270" 
+        fill="none" 
+        stroke="url(#goldGrad)" 
+        stroke-width="44" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+        
+  <!-- Flèche de cassure haussière (Breakout) -->
+  <path d="M400 270 L445 210" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="44" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+        
+  <!-- Point d'impact de la Target -->
+  <circle cx="445" cy="210" r="22" fill="#ffffff" />
+</svg>
